@@ -1,0 +1,17 @@
+{
+    "dialog-state": {
+        "query": "noisySBMggm",
+        "path": "",
+        "regex": false,
+        "caseSensitive": true,
+        "wholeWord": false,
+        "filePatterns": [],
+        "useGitGrep": true,
+        "excludeGitIgnore": true,
+        "excludeFilePatterns": [],
+        "resultsCount": 40,
+        "errorCount": 0,
+        "replaceErrors": "",
+        "projectRelative": true
+    }
+}
