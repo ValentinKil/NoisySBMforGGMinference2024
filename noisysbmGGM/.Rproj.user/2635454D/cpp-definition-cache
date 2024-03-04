@@ -1,6 +1,6 @@
 [
     {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/Delta.cpp",
+        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/Delta.cpp",
         "file_last_write": 1689641554.0,
         "definitions": [
             {
@@ -8,7 +8,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "Delta_fast(const arma::vec &, const arma::mat &, const arma::mat &, int, int, int, int, int, const arma::uvec &, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/Delta.cpp",
+                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/Delta.cpp",
                 "line": 7,
                 "column": 12,
                 "hidden": false
@@ -17,7 +17,7 @@
         "hidden": false
     },
     {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/Delta_Orange_5.cpp",
+        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/Delta_Orange_5.cpp",
         "file_last_write": 1689641538.0,
         "definitions": [
             {
@@ -25,7 +25,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "Delta_orange_5_fast(const arma::vec &, const arma::mat &, int, int, int, int, int, const arma::vec &, int, int, const arma::vec &, const arma::vec &, const arma::vec &)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/Delta_Orange_5.cpp",
+                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/Delta_Orange_5.cpp",
                 "line": 8,
                 "column": 11,
                 "hidden": false
@@ -34,7 +34,7 @@
         "hidden": false
     },
     {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/Delta_SBM_2.cpp",
+        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/Delta_SBM_2.cpp",
         "file_last_write": 1689641568.0,
         "definitions": [
             {
@@ -42,7 +42,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "Delta_SBM_2_fast(const arma::vec &, const arma::mat &, int, int, int, int, int, int, double, double, int, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/Delta_SBM_2.cpp",
+                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/Delta_SBM_2.cpp",
                 "line": 5,
                 "column": 11,
                 "hidden": false
@@ -51,7 +51,7 @@
         "hidden": false
     },
     {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/I_kl.cpp",
+        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/I_kl.cpp",
         "file_last_write": 1697611472.0,
         "definitions": [
             {
@@ -59,7 +59,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "I_fast_same(const arma::mat &, const arma::umat &, arma::vec &, const arma::vec &, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/I_kl.cpp",
+                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/I_kl.cpp",
                 "line": 12,
                 "column": 6,
                 "hidden": false
@@ -69,7 +69,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "I_fast_diff(const arma::mat &, const arma::umat &, arma::vec &, const arma::vec &, int, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/I_kl.cpp",
+                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/I_kl.cpp",
                 "line": 22,
                 "column": 6,
                 "hidden": false
@@ -79,7 +79,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "I_fast(const arma::umat &, const arma::vec &, const arma::mat &, int, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/I_kl.cpp",
+                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/I_kl.cpp",
                 "line": 36,
                 "column": 12,
                 "hidden": false
@@ -88,7 +88,7 @@
         "hidden": false
     },
     {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/convertNodePair.cpp",
+        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/convertNodePair.cpp",
         "file_last_write": 1695115054.0,
         "definitions": [
             {
@@ -96,112 +96,7 @@
                 "kind": 6,
                 "parent_name": "",
                 "name": "convertNodePair_fast(int, const arma::vec &, int, bool)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisySBMggm/src/convertNodePair.cpp",
-                "line": 5,
-                "column": 11,
-                "hidden": false
-            }
-        ],
-        "hidden": false
-    },
-    {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/Delta.cpp",
-        "file_last_write": 1689641554.0,
-        "definitions": [
-            {
-                "usr": "c:@F@Delta_fast#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#S2_#I#I#I#I#I#&1$@N@arma@S@Col>#i#I#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "Delta_fast(const arma::vec &, const arma::mat &, const arma::mat &, int, int, int, int, int, const arma::uvec &, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/Delta.cpp",
-                "line": 7,
-                "column": 12,
-                "hidden": false
-            }
-        ],
-        "hidden": false
-    },
-    {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/Delta_Orange_5.cpp",
-        "file_last_write": 1689641538.0,
-        "definitions": [
-            {
-                "usr": "c:@F@Delta_orange_5_fast#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#I#I#I#I#I#S0_#I#I#S0_#S0_#S0_#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "Delta_orange_5_fast(const arma::vec &, const arma::mat &, int, int, int, int, int, const arma::vec &, int, int, const arma::vec &, const arma::vec &, const arma::vec &)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/Delta_Orange_5.cpp",
-                "line": 8,
-                "column": 11,
-                "hidden": false
-            }
-        ],
-        "hidden": false
-    },
-    {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/Delta_SBM_2.cpp",
-        "file_last_write": 1689641568.0,
-        "definitions": [
-            {
-                "usr": "c:@F@Delta_SBM_2_fast#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#I#I#I#I#I#I#d#d#I#I#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "Delta_SBM_2_fast(const arma::vec &, const arma::mat &, int, int, int, int, int, int, double, double, int, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/Delta_SBM_2.cpp",
-                "line": 5,
-                "column": 11,
-                "hidden": false
-            }
-        ],
-        "hidden": false
-    },
-    {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/I_kl.cpp",
-        "file_last_write": 1697611472.0,
-        "definitions": [
-            {
-                "usr": "c:@N@mjd@F@I_fast_same#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Mat>#i#&$@N@arma@S@Col>#d#&1S5_#I#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "I_fast_same(const arma::mat &, const arma::umat &, arma::vec &, const arma::vec &, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/I_kl.cpp",
-                "line": 12,
-                "column": 6,
-                "hidden": false
-            },
-            {
-                "usr": "c:@N@mjd@F@I_fast_diff#&1$@N@arma@S@Mat>#d#&1$@N@arma@S@Mat>#i#&$@N@arma@S@Col>#d#&1S5_#I#I#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "I_fast_diff(const arma::mat &, const arma::umat &, arma::vec &, const arma::vec &, int, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/I_kl.cpp",
-                "line": 22,
-                "column": 6,
-                "hidden": false
-            },
-            {
-                "usr": "c:@F@I_fast#&1$@N@arma@S@Mat>#i#&1$@N@arma@S@Col>#d#&1$@N@arma@S@Mat>#d#I#I#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "I_fast(const arma::umat &, const arma::vec &, const arma::mat &, int, int)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/I_kl.cpp",
-                "line": 36,
-                "column": 12,
-                "hidden": false
-            }
-        ],
-        "hidden": false
-    },
-    {
-        "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/convertNodePair.cpp",
-        "file_last_write": 1695115054.0,
-        "definitions": [
-            {
-                "usr": "c:@F@convertNodePair_fast#I#&1$@N@arma@S@Col>#d#I#b#",
-                "kind": 6,
-                "parent_name": "",
-                "name": "convertNodePair_fast(int, const arma::vec &, int, bool)",
-                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2023/noisysbmGGM/src/convertNodePair.cpp",
+                "file": "/Users/vkilian/Documents/Thése/ShareFile/NoisySBM/NoisySBMforGGMinference2024/noisysbmGGM/src/convertNodePair.cpp",
                 "line": 5,
                 "column": 11,
                 "hidden": false
