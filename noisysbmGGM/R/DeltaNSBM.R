@@ -214,14 +214,10 @@ Delta_orange_5<-function(dataVec, Z_matrix, iStar, g, h, k, l, I_kl, n_kl, n_kl_
 
   if (n_kl == 0){ E_X = 0 ; E_X2 = 0 }
   else{  E_X = sum_E_X / n_kl ;  E_X2 = sum_E_X2 / n_kl }
-  # cat("sumEX", sum_E_X, "\n")
-  # cat("EX", E_X, "\n")
 
   # -- E_Ikl_test
   sum_psi_X =-1*(k==g)* sum(l_remove * dataVec[ind.iStar]) + 1*(l==h)*sum(k_add * dataVec[ind.iStar])
   sum_psi_X2 = -1*(k==g)* sum(l_remove * (dataVec[ind.iStar])**2) + 1*(l==h)*sum(k_add * (dataVec[ind.iStar])**2)
-  # cat("sum_psi_X ", sum_psi_X , "\n")
-  # cat("sum_psi_X2", sum_psi_X2, "\n")
 
   if (n_kl_test == 0){ E_X2_test = 0 ;   E_X_test = 0 }
   else{ E_X2_test = (n_kl/n_kl_test)*E_X2+ (1/n_kl_test)*sum_psi_X2

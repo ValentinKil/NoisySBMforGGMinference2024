@@ -31,7 +31,6 @@ initialZ <- function(Q,  dataMatrix, nbOfZ, percentageOfPerturbation){
     k=1
     while(k<=nbOfZ){
       listOfZ[[k]] <- sample(1:Q, p, replace=TRUE)
-      # print("random")
       k<-k+1
     }
 

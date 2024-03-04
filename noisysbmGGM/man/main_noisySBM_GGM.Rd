@@ -25,7 +25,8 @@ main_noisySBM_GGM(
   nbOfZ = 12,
   sigma0 = 1,
   sigma1 = 1,
-  percentageOfPerturbation = 0.3
+  percentageOfPerturbation = 0.3,
+  verbatim = TRUE
 )
 }
 \arguments{
@@ -70,6 +71,8 @@ main_noisySBM_GGM(
 \item{sigma1}{standard deviation under the alternative hypothesis in the non-NIG method (by default sigma1=1)}
 
 \item{percentageOfPerturbation}{perturbation during initialization  (by default percentageOfPerturbation=0.3)}
+
+\item{verbatim}{print information message}
 }
 \value{
 \item{\code{A}}{the adjacency matrix of the inferred graph}

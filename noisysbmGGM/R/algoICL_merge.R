@@ -214,15 +214,11 @@ delta_NSBM_Merge_Nondirige <- function(ind.all, dataVec, A, Amerge, Z, Zmatrix, 
   terme4 = -0.5* (terme4_merge - terme4)
   terme5 = -0.5 * tau**2 * (terme5_merge - terme5)
   terme6 = -(terme6_merge - terme6)
-  #cat("t3_merge", terme3_merge, "\n")
-  #cat("t4_merge", terme4_merge, "\n")
-  #cat("t5_merge", terme5_merge, "\n")
+
 
   delta_orange = terme3+terme4+terme5+terme6+ terme2
   terme1_SBM = lgamma(n0) +lgamma((Q-1)*n0) +lgamma(Q*n0+p) +lgamma(n_g+n_h-n0) - lgamma(Q*n0) -lgamma((Q-1)*n0+p) -lgamma(n_g) -lgamma(n_h)
-  # cat("term2_SBM_merge",terme2_SBM_merge,"\n")
-  # cat("term2_SBM",terme2_SBM,"\n")
-  # cat("term1",terme1_SBM ,"\n")
+
 
   delta_SBM= terme1_SBM +terme2_SBM_merge - terme2_SBM
 

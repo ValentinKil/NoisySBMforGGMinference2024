@@ -22,9 +22,7 @@ evalICL <- function(ind.all, dataVec, Z, Z_matrix, Q, A, rho, tau,  n0, eta0, ze
       n_kl=I$n_kl
       m_kl <- if (k==l) 1/2*(nk[k]-n0)*(nk[k]-n0 - 1)  else (nk[k]-n0)*(nk[l]-n0)
       eta_kl = eta0 + n_kl
-      #   cat("eta_kl", eta_kl, "\n")
       zeta_kl = zeta0 + m_kl - n_kl
-      #    cat("zeta_kl", zeta_kl, "\n")
 
       sum_E_X = sum(I_kl *  dataVec)   #sum_{I_kl} Xij
       sum_E_X2 = sum(I_kl *  dataVec**2)    #sum_{I_kl} (Xij)^2
@@ -37,7 +35,6 @@ evalICL <- function(ind.all, dataVec, Z, Z_matrix, Q, A, rho, tau,  n0, eta0, ze
 
       # --------------- SBM : term2
       term2_SBM = term2_SBM + lbeta(eta_kl, zeta_kl)-lbeta(eta0, zeta0)
-      #   cat("term2_SBM", term2_SBM, "\n")
 
 
       # --------------- Orange
@@ -77,9 +74,7 @@ evalICL_NIG <- function(ind.all, dataVec, Z, Z_matrix, Q, A, a, b, c, d,  n0, et
       n_kl=I$n_kl
       m_kl <- if (k==l) 1/2*(nk[k]-n0)*(nk[k]-n0 - 1)  else (nk[k]-n0)*(nk[l]-n0)
       eta_kl = eta0 + n_kl
-      #   cat("eta_kl", eta_kl, "\n")
       zeta_kl = zeta0 + m_kl - n_kl
-      #    cat("zeta_kl", zeta_kl, "\n")
 
       sum_E_X = sum(I_kl *  dataVec)   #sum_{I_kl} Xij
       sum_E_X2 = sum(I_kl *  dataVec**2)    #sum_{I_kl} (Xij)^2
@@ -89,7 +84,6 @@ evalICL_NIG <- function(ind.all, dataVec, Z, Z_matrix, Q, A, a, b, c, d,  n0, et
 
       # --------------- SBM : term2
       term2_SBM = term2_SBM + lbeta(eta_kl, zeta_kl)-lbeta(eta0, zeta0)
-      #   cat("term2_SBM", term2_SBM, "\n")
 
 
       # --------------- NSBM
@@ -98,7 +92,6 @@ evalICL_NIG <- function(ind.all, dataVec, Z, Z_matrix, Q, A, a, b, c, d,  n0, et
       d_x=d_post_kl(a,b,c,d,E_X,E_X2, n_kl)
 
       termNSBM = termNSBM + terme_log(b_x,c_x,d_x)
-      # cat("termNSBM", termNSBM, "\n")
     }
   }
   term1_SBM =  sum(lgamma(nk)) - lgamma(sum(nk)) - Q* lgamma(n0) + lgamma(Q*n0)
@@ -107,7 +100,6 @@ evalICL_NIG <- function(ind.all, dataVec, Z, Z_matrix, Q, A, a, b, c, d,  n0, et
   pi3.14 <- .BaseNamespaceEnv$pi
   term_NSBM = -N/2 *log(2*pi3.14) - sum((1-A)*((0.5/(sigma0**2))*dataVec**2+log(sigma0))) - 0.5*Q*(Q+1)*terme_log(b,c,d)+termNSBM
   ICL_exact_NSBM = term_SBM + term_NSBM
-  # cat("ICL", ICL_exact_NSBM, "\n")
   return(list(ICL_exact_NSBM=ICL_exact_NSBM, term_NSBM=term_NSBM, term_SBM=term_SBM))
 }
 

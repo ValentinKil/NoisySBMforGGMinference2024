@@ -26,7 +26,8 @@
 #' @param sigma0 standard deviation under the null hypothesis (by default sigma0=1)
 #' @param sigma1  standard deviation under the alternative hypothesis in the non-NIG method (by default sigma1=1)
 #' @param percentageOfPerturbation perturbation during initialization  (by default percentageOfPerturbation=0.3)
-#'
+#' @param verbatim print information message  
+#' 
 #' @return \item{\code{A}}{the adjacency matrix of the inferred graph}
 #'  \item{\code{Z}}{the inferred clustering}
 #'  \item{\code{theta}}{the parameters of the noisySBM at the end}
@@ -34,7 +35,7 @@
 #'
 #' @examples
 #' main_noisySBM(NSBMtest$dataMatrix,NIG=TRUE,Qup=10,nbOfZ=1)
-main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL, a=NULL,b=NULL,c=NULL,d=NULL, n0=1, eta0=1, zeta0=1, alpha=0.1, Qup=NULL, nbCores=1, nbOfZ=12, sigma0=1, sigma1=1,percentageOfPerturbation=0.3){
+main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL, a=NULL,b=NULL,c=NULL,d=NULL, n0=1, eta0=1, zeta0=1, alpha=0.1, Qup=NULL, nbCores=1, nbOfZ=12, sigma0=1, sigma1=1,percentageOfPerturbation=0.3,verbatim=TRUE){
   p=length(X[1,])
   if(is.null(Qup)) Qup=p
   if(length(X[,1])!=p){
@@ -49,7 +50,7 @@ main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL
     if(is.null(c)) c=1
     if(is.null(d)) d=1
     dataVec=X[lower.tri(X)]
-    result=mainSearchOpti_NIG(X, Qup=Qup,  threshold=threshold, Nbrepet=Nbrepet, nbCores=nbCores, nbOfZ=nbOfZ, percentageOfPerturbation=percentageOfPerturbation, a=a, b=b, c=c, d=d, n0=n0, eta0=eta0, zeta0=zeta0,sigma0=sigma0, fast=TRUE)
+    result=mainSearchOpti_NIG(X, Qup=Qup,  threshold=threshold, Nbrepet=Nbrepet, nbCores=nbCores, nbOfZ=nbOfZ, percentageOfPerturbation=percentageOfPerturbation, a=a, b=b, c=c, d=d, n0=n0, eta0=eta0, zeta0=zeta0,sigma0=sigma0, fast=TRUE,verbatim=verbatim)
     if (result$Q > 1){
       test=Merge_Nondirige_NIG(dataVec, result$Z, result$Zmatrix, result$Q, result$Rho, result$A,result$theta, threshold=threshold, a=a, b=b, c=c, d=d, n0=n0, eta0=eta0, zeta0=zeta0)
       result$A = InferGraph(test$Rhomerge, test$thetamerge, test$Zmerge, dataVec, alpha)
@@ -65,7 +66,7 @@ main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL
     if(is.null(rho)) rho=1
     if(is.null(tau)) tau=1
     dataVec=X[lower.tri(X)]
-    result=mainSearchOpti(X, Qup=Qup,  threshold=threshold, Nbrepet=Nbrepet, nbCores=nbCores, nbOfZ=nbOfZ, percentageOfPerturbation=percentageOfPerturbation, rho=rho, tau=tau, n0=n0, eta0=eta0, zeta0=zeta0, sigma0=sigma0, sigma1=sigma1, fast=TRUE)
+    result=mainSearchOpti(X, Qup=Qup,  threshold=threshold, Nbrepet=Nbrepet, nbCores=nbCores, nbOfZ=nbOfZ, percentageOfPerturbation=percentageOfPerturbation, rho=rho, tau=tau, n0=n0, eta0=eta0, zeta0=zeta0, sigma0=sigma0, sigma1=sigma1, fast=TRUE,verbatim=verbatim)
     if (result$Q > 1){
       test=Merge_Nondirige(dataVec, result$Z, result$Zmatrix, result$Q, result$Rho, result$A,result$theta, threshold=threshold, rho=rho, tau=tau, n0=n0, eta0=eta0, zeta0=zeta0)
       result$A = InferGraph(test$Rhomerge, test$thetamerge, test$Zmerge, dataVec, alpha)
@@ -111,7 +112,7 @@ main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL
 #' @param sigma0 standard deviation under the null hypothesis (by default sigma0=1)
 #' @param sigma1 standard deviation under the alternative hypothesis in the non-NIG method (by default sigma1=1)
 #' @param percentageOfPerturbation perturbation during initialization  (by default percentageOfPerturbation=0.3)
-#'
+#' @param verbatim print information message  
 #'
 #' @return \item{\code{A}}{the adjacency matrix of the inferred graph}
 #'  \item{\code{Z}}{the inferred clustering}
@@ -121,7 +122,7 @@ main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL
 #' main_noisySBM_GGM(GGMtest$dataMatrix,Meth="Ren",NIG=TRUE,Qup=10,nbOfZ=1)
 #'
 #' @seealso main_noisySBM
-main_noisySBM_GGM <-function(X, Meth="Ren", NIG=NULL, threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL, a=NULL,b=NULL,c=NULL,d=NULL, n0=1, eta0=1, zeta0=1, alpha=0.1, Qup=NULL, nbCores=1, nbOfZ=12, sigma0=1, sigma1=1,percentageOfPerturbation=0.3){
+main_noisySBM_GGM <-function(X, Meth="Ren", NIG=NULL, threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL, a=NULL,b=NULL,c=NULL,d=NULL, n0=1, eta0=1, zeta0=1, alpha=0.1, Qup=NULL, nbCores=1, nbOfZ=12, sigma0=1, sigma1=1,percentageOfPerturbation=0.3,verbatim=TRUE){
   if(Meth=="Ren"){
     outlist_Ren <- SILGGM::SILGGM(X, method = "B_NW_SL")
     dataMatrix=outlist_Ren$z_score_precision
@@ -150,7 +151,7 @@ main_noisySBM_GGM <-function(X, Meth="Ren", NIG=NULL, threshold=0.5, Nbrepet=2, 
     if(is.null(NIG)) NIG=FALSE}
   else{stop("Unknown method")}
 
-  return(main_noisySBM(dataMatrix,NIG=NIG,threshold=threshold, Nbrepet=Nbrepet, rho=rho,tau=tau, a=a,b=b,c=c,d=d, n0=n0, eta0=eta0, zeta0=zeta0, alpha=alpha, Qup=Qup, nbCores=nbCores, nbOfZ=nbOfZ, sigma0=sigma0, sigma1=sigma1,percentageOfPerturbation=percentageOfPerturbation))
+  return(main_noisySBM(dataMatrix,NIG=NIG,threshold=threshold, Nbrepet=Nbrepet, rho=rho,tau=tau, a=a,b=b,c=c,d=d, n0=n0, eta0=eta0, zeta0=zeta0, alpha=alpha, Qup=Qup, nbCores=nbCores, nbOfZ=nbOfZ, sigma0=sigma0, sigma1=sigma1,percentageOfPerturbation=percentageOfPerturbation,verbatim=verbatim))
 }
 
 

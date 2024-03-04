@@ -174,7 +174,6 @@ get_AStar_threshold <- function(iStar, RhoStar, threshold){
   p=length(RhoStar) + 1
   AStar <-  matrix(0, nrow=1, ncol=p)
   AStar[,-iStar]  <- (RhoStar >=threshold)
-  # cat("rho=", round(rho,1), "\n")
   return(AStar=AStar)
 }
 
@@ -336,11 +335,8 @@ SearchOpti_iStar <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho, th
 
   # -------- Change cluster of iStar if necessary
   h = which.max(listDelta)  # cluster which has the biggest ICL
-  #  cat("g",g,"\n")
-  #  cat("h",h,"\n")
 
   if (h!=g){
-    # cat("iStar", iStar, "change de groupe", "\n")
     swapping = swapUpdate(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, threshold)
     Z=swapping$Ztest
     Zmatrix=swapping$Ztest_matrix
@@ -372,11 +368,9 @@ SearchOpti_iStar_NIG <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho
 
   # -------- Change cluster of iStar if necessary
   h = which.max(listDelta)  # cluster which has the biggest ICL
-  #  cat("g",g,"\n")
-  #  cat("h",h,"\n")
+
 
   if (h!=g){
-    # cat("iStar", iStar, "change de groupe", "\n")
     swapping = swapUpdate_NIG(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, threshold)
     Z=swapping$Ztest
     Zmatrix=swapping$Ztest_matrix
@@ -391,7 +385,7 @@ SearchOpti_iStar_NIG <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho
 
 
 #    ---------   SearchOpti "for all nodes and an initialization" -----------------------------------------------------------
-SearchOpti <- function(init, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast){
+SearchOpti <- function(init, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast,verbatim=TRUE){
 
   #------- init
   Z=init$Z
@@ -404,7 +398,7 @@ SearchOpti <- function(init, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0,
   # -------------------------algo for all nodes
   p=length(Z)
   for (repet in 1:Nbrepet){
-    cat("-----repet", repet, "\n")
+    if(verbatim){cat("-----repet", repet, "\n")}
     Nodes = 1:p
     iStarSauv = NULL  #
     while ((length(Nodes) >1)  & (Q > 1)){
@@ -423,7 +417,6 @@ SearchOpti <- function(init, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0,
 
     if ((length(Nodes) ==1)  & (Q > 1)){
       iStar=Nodes
-      #cat("iStar=", iStar, "\n---")
       res = SearchOpti_iStar(iStar, ind.all, dataVec, Z,  Zmatrix, theta, Rho, threshold, rho, tau, n0, eta0, zeta0, fast)
       Rho=res$Rho
       Z=res$Z
@@ -452,7 +445,7 @@ SearchOpti <- function(init, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0,
 
 
 
-SearchOpti_NIG <- function(init, dataVec, ind.all, threshold, Nbrepet, a, b, c , d, n0, eta0, zeta0, fast){
+SearchOpti_NIG <- function(init, dataVec, ind.all, threshold, Nbrepet, a, b, c , d, n0, eta0, zeta0, fast,verbatim=TRUE){
 
   #------- init
   Z=init$Z
@@ -465,7 +458,7 @@ SearchOpti_NIG <- function(init, dataVec, ind.all, threshold, Nbrepet, a, b, c ,
   # -------------------------algo for all nodes
   p=length(Z)
   for (repet in 1:Nbrepet){
-    cat("-----repet", repet, "\n")
+    if(verbatim){cat("-----repet", repet, "\n")}
     Nodes = 1:p
     iStarSauv = NULL  #
     while ((length(Nodes) >1)  & (Q > 1)){
@@ -485,7 +478,6 @@ SearchOpti_NIG <- function(init, dataVec, ind.all, threshold, Nbrepet, a, b, c ,
 
     if ((length(Nodes) ==1)  & (Q > 1)){
       iStar=Nodes
-      #cat("iStar=", iStar, "\n---")
       res = SearchOpti_iStar_NIG(iStar, ind.all, dataVec, Z,  Zmatrix, theta, Rho, threshold,  a,b,c,d, n0, eta0, zeta0, fast)
       Rho=res$Rho
       Z=res$Z
@@ -508,20 +500,20 @@ SearchOpti_NIG <- function(init, dataVec, ind.all, threshold, Nbrepet, a, b, c ,
 }
 
 
-SearchOpti_parallel <- function(s, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast){
-  cat("s=",s,"\n---------------------------------------------------------------------")
+SearchOpti_parallel <- function(s, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast,verbatim=TRUE){
+  if(verbatim){cat("s=",s,"\n---------------------------------------------------------------------")}
   dataVec=ListOfInit$dataVec
   currentInitialPoint <-  list(Z=ListOfInit$init$Z[[s]], Zmatrix=ListOfInit$init$Zmatrix[[s]], Rho=ListOfInit$init$Rho[[s]], theta=ListOfInit$init$theta[[s]])
-  currentSolution <- SearchOpti(currentInitialPoint, dataVec, ind.all, threshold,  Nbrepet,  rho, tau, n0, eta0, zeta0, fast)
+  currentSolution <- SearchOpti(currentInitialPoint, dataVec, ind.all, threshold,  Nbrepet,  rho, tau, n0, eta0, zeta0, fast,verbatim)
   currentSolution$sBest <- s
   return(currentSolution)
 }
 
-SearchOpti_parallel_NIG <- function(s, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, a, b, c, d, n0, eta0, zeta0, fast){
-  cat("s=",s,"\n---------------------------------------------------------------------")
+SearchOpti_parallel_NIG <- function(s, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, a, b, c, d, n0, eta0, zeta0, fast,verbatim=TRUE){
+  if(verbatim){cat("s=",s,"\n---------------------------------------------------------------------")}
   dataVec=ListOfInit$dataVec
   currentInitialPoint <-  list(Z=ListOfInit$init$Z[[s]], Zmatrix=ListOfInit$init$Zmatrix[[s]], Rho=ListOfInit$init$Rho[[s]], theta=ListOfInit$init$theta[[s]])
-  currentSolution <- SearchOpti_NIG(currentInitialPoint, dataVec, ind.all, threshold,  Nbrepet, a, b, c, d, n0, eta0, zeta0, fast)
+  currentSolution <- SearchOpti_NIG(currentInitialPoint, dataVec, ind.all, threshold,  Nbrepet, a, b, c, d, n0, eta0, zeta0, fast,verbatim)
   currentSolution$sBest <- s
   return(currentSolution)
 }
@@ -529,7 +521,7 @@ SearchOpti_parallel_NIG <- function(s, ListOfInit, dataMatrix, ind.all, threshol
 
 
 # -----------   main : SearchOpti  :  for several initialisations ---------------------------------------------------------------------
-mainSearchOpti <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, percentageOfPerturbation, rho, tau, n0, eta0, zeta0, sigma0, sigma1, fast){
+mainSearchOpti <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, percentageOfPerturbation, rho, tau, n0, eta0, zeta0, sigma0, sigma1, fast,verbatim=TRUE){
   p=nrow(dataMatrix)
   ind.all=listNodePairs(p, directed=FALSE)
 
@@ -544,21 +536,21 @@ mainSearchOpti <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, 
 
   if(doParallelComputing){
     ListOfSolutions <- parallel::mclapply(1:M, function(k){
-      SearchOpti_parallel(k, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast)},  mc.cores=nbCores)
+      SearchOpti_parallel(k, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast,verbatim)},  mc.cores=nbCores)
 
     ListOfICL <- lapply(ListOfSolutions, function(solutionThisRun) solutionThisRun$ICL)
     BestSolution <- ListOfSolutions[[which.max(ListOfICL)]]
-    cat("s=",which.max(ListOfICL), "\n")
+    if(verbatim){cat("s=",which.max(ListOfICL), "\n")}
   }else{
     for (s in 1:M){
-      cat("s",s, "--------------------\n")
+      if(verbatim){cat("s",s, "--------------------\n")}
       currentInitialPoint <-  list(Z=ListOfInit$init$Z[[s]], Zmatrix=ListOfInit$init$Zmatrix[[s]], Rho=ListOfInit$init$Rho[[s]], theta=ListOfInit$init$theta[[s]])
       dataVec=ListOfInit$dataVec
-      currentSolution <- SearchOpti(currentInitialPoint, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast)
+      currentSolution <- SearchOpti(currentInitialPoint, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast,verbatim)
       currentSolution$sBest <- s
       if (currentSolution$ICL > BestICL){
-        cat("s better than before \n" )
-        cat("sBest=", s, "\n")
+        if(verbatim){cat("s better than before \n" )
+        cat("sBest=", s, "\n")}
         BestSolution <-  currentSolution
         BestICL=currentSolution$ICL
       }
@@ -568,7 +560,7 @@ mainSearchOpti <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, 
 
 }
 
-mainSearchOpti_NIG <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, percentageOfPerturbation,  a,b,c,d, n0, eta0, zeta0, sigma0, fast){
+mainSearchOpti_NIG <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, percentageOfPerturbation,  a,b,c,d, n0, eta0, zeta0, sigma0, fast,verbatim=TRUE){
   p=nrow(dataMatrix)
   ind.all=listNodePairs(p, directed=FALSE)
 
@@ -583,21 +575,21 @@ mainSearchOpti_NIG <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbO
 
   if(doParallelComputing){
     ListOfSolutions <- parallel::mclapply(1:M, function(k){
-      SearchOpti_parallel_NIG(k, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, a,b,c,d, n0, eta0, zeta0, fast)},   mc.cores=nbCores)
+      SearchOpti_parallel_NIG(k, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, a,b,c,d, n0, eta0, zeta0, fast,verbatim)},   mc.cores=nbCores)
 
     ListOfICL <- lapply(ListOfSolutions, function(solutionThisRun) solutionThisRun$ICL)
     BestSolution <- ListOfSolutions[[which.max(ListOfICL)]]
-    cat("s=",which.max(ListOfICL), "\n")
+    if(verbatim){cat("s=",which.max(ListOfICL), "\n")}
   }else{
     for (s in 1:M){
-      cat("s",s, "--------------------\n")
+      if(verbatim){cat("s",s, "--------------------\n")}
       currentInitialPoint <-  list(Z=ListOfInit$init$Z[[s]], Zmatrix=ListOfInit$init$Zmatrix[[s]], Rho=ListOfInit$init$Rho[[s]], theta=ListOfInit$init$theta[[s]])
       dataVec=ListOfInit$dataVec
-      currentSolution <- SearchOpti_NIG(currentInitialPoint, dataVec, ind.all, threshold, Nbrepet, a,b,c,d, n0, eta0, zeta0, fast)
+      currentSolution <- SearchOpti_NIG(currentInitialPoint, dataVec, ind.all, threshold, Nbrepet, a,b,c,d, n0, eta0, zeta0, fast,verbatim)
       currentSolution$sBest <- s
       if (currentSolution$ICL > BestICL){
-        cat("s better than before \n" )
-        cat("sBest=", s, "\n")
+        if(verbatim){cat("s better than before \n" )
+        cat("sBest=", s, "\n")}
         BestSolution <-  currentSolution
         BestICL=currentSolution$ICL
       }

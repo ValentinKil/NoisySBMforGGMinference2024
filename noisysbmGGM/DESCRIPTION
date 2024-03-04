@@ -1,6 +1,6 @@
 Package: noisysbmGGM
-Title: Noisy Stochastic Block Mode: Graph and GGM Inference by Multiple Testing and Greedy Bayesian Algorithme
-Version: 0.1
+Title: Noisy Stochastic Block Mode: Graph and GGM Inference by Multiple Testing and Greedy Bayesian Algorithm
+Version: 0.1.1
 Authors@R: c(person(given = "Valentin",
            family = "Kilian",
            role = c("aut", "cre"),
@@ -11,7 +11,7 @@ Authors@R: c(person(given = "Valentin",
            email = "fanny.villers@upmc.fr"))
 Author: Valentin Kilian [aut, cre], Fanny Villers [aut]
 Maintainer: Valentin Kilian <valentin.kilian@ens-rennes.fr>
-Description: Greedy bayesian algorithm to fit the noisy stochastic block model to an observed sparse graph. Moreover, a graph inference procedure to recover Gaussian Graphical Model from real data. This procedure comes with a control of the false discovery rate. The method is described in the article "Enhancing the Power of Gaussian Graphical Model Inference by Modeling the Graph Structure" by Valentin Kilian, Tabea Rebafka, and Fanny Villers <https://hal.science/hal-04460593>.
+Description: Greedy Bayesian algorithm to fit the noisy stochastic block model to an observed sparse graph. Moreover, a graph inference procedure to recover Gaussian Graphical Model from real data. This procedure comes with a control of the false discovery rate. The method is described in the article "Enhancing the Power of Gaussian Graphical Model Inference by Modeling the Graph Structure" by Kilian, Rebafka, and Villers (2024) <https:hal.science/hal-04460593>.
 License: GPL-2
 Encoding: UTF-8
 Imports: parallel,ppcor,SILGGM,stats,igraph,huge,Rcpp,RcppArmadillo,MASS,RColorBrewer
