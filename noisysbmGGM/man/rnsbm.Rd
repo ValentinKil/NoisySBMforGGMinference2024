@@ -2,7 +2,7 @@
 % Please edit documentation in R/auxiliaryFunctions.R
 \name{rnsbm}
 \alias{rnsbm}
-\title{return a random NSBM, correspond to the Algo1 in ESJ paper}
+\title{return a random NSBM}
 \usage{
 rnsbm(p, theta, modelFamily = "Gauss")
 }
@@ -33,5 +33,5 @@ with a sampling of the law under the null
 then for each entry where A is none zero we sample it according to the law under the alternative
 }
 \description{
-return a random NSBM, correspond to the Algo1 in ESJ paper
+return a random NSBM
 }

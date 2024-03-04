@@ -1,5 +1,5 @@
 #=======================  When the variance is known =========================
-evalICL <- function(ind.all, dataVec, Z, Z_matrix, Q, A, rho, tau,  n0, eta0, zeta0, sigma0, sigma1){  #A=Avec
+evalICL <- function(ind.all, dataVec, Z, Z_matrix, Q, A, rho, tau,  n0, eta0, zeta0, sigma0, sigma1){  #A is a vector
 
   p = length(Z)
   N <-  p*(p-1)/2

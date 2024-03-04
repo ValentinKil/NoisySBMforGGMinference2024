@@ -19,7 +19,7 @@ NSBMtest
 Example of NoisySBM data
 }
 \examples{
-main_noisySBM(NSBMtest$dataMatrix,NIG=TRUE,Qup=10,nbOfZ=1)
+main_noisySBM(NSBMtest$dataMatrix,NIG=TRUE,Qup=10,nbOfZ=1,nbCores=1)
 
 #Note : These data were created using the following instructions
 p=50

@@ -6,44 +6,45 @@
 #' offering various options and providing useful outputs for further analysis
 #'
 #' @export
-#' @param X A square matrix containing the data
-#' @param NIG A Boolean, if TRUE then the NIG method is used, if FALSE then the non-NIG method is used (by default NIG=FALSE)
-#' @param threshold Threshold use when updating the latent graphs structure from l-values
-#' @param Nbrepet  Number of times the algorithm is repeated
+#' @param X A p-square matrix containing the data
+#' @param NIG A Boolean. If FALSE (by default), the variance under the alternative hypothesis in assumed to be known. If TRUE, the variances under the alternatives are unknown and estimated with the NIG method
+#' @param sigma0 standard deviation under the null hypothesis (by default sigma0=1)
+#' @param sigma1  standard deviation under the alternative hypothesis in the non-NIG method (by default sigma1=1)
+#' @param alpha Level of significance of the multiple testing procedure (by default alpha=0.1)
+#' @param Qup  Maximal number of cluster (by default Qup =10)
+#' @param nbCores Nb of cores to be used during calculations (by default nbCores=parallel::detectCores())
+#' @param nbOfZ  Nb of initialization (by default nbOfZ=12)
+#' @param percentageOfPerturbation perturbation during initialization  (by default percentageOfPerturbation=0.3)
+#' @param threshold Threshold use when updating the latent graphs structure from l-values (by default threshold=0.5)
+#' @param Nbrepet  Number of times the algorithm is repeated (by default Nbrepet=2)
+#' @param n0 Hyperparameter (by default n0=1)
+#' @param eta0 Hyperparameter (by default eta0=1)
+#' @param zeta0 Hyperparameter (by default zeta0=1)
 #' @param rho Hyperparameter of the non-NIG method (by default rho=1)
 #' @param tau Hyperparameter of the non-NIG method (by default tau=1)
 #' @param a Hyperparameter of the NIG method (by default a=0)
 #' @param b Hyperparameter of the NIG method (by default b=1)
 #' @param c Hyperparameter of the NIG method (by default c=1)
 #' @param d Hyperparameter of the NIG method (by default d=1)
-#' @param n0 Hyperparameter (by default n0=1)
-#' @param eta0 Hyperparameter (by default eta0=1)
-#' @param zeta0 Hyperparameter (by default zeta0=1)
-#' @param alpha Level of significance of the multiple testing procedure (by default alpha=0.1)
-#' @param Qup  Maximal number of cluster (by default Qup is equal to the first dimension of X )
-#' @param nbCores Nb of cores to be used during calculations (by default nbCores=1)
-#' @param nbOfZ  Nb of initialization (by default nbOfZ=7)
-#' @param sigma0 standard deviation under the null hypothesis (by default sigma0=1)
-#' @param sigma1  standard deviation under the alternative hypothesis in the non-NIG method (by default sigma1=1)
-#' @param percentageOfPerturbation perturbation during initialization  (by default percentageOfPerturbation=0.3)
-#' @param verbatim print information message  
-#' 
+#' @param verbatim print information messages  
+
+#'
 #' @return \item{\code{A}}{the adjacency matrix of the inferred graph}
 #'  \item{\code{Z}}{the inferred clustering}
 #'  \item{\code{theta}}{the parameters of the noisySBM at the end}
 #'  \item{\code{Q}}{the number of clusters at the end}
 #'
 #' @examples
-#' main_noisySBM(NSBMtest$dataMatrix,NIG=TRUE,Qup=10,nbOfZ=1)
-main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL, a=NULL,b=NULL,c=NULL,d=NULL, n0=1, eta0=1, zeta0=1, alpha=0.1, Qup=NULL, nbCores=1, nbOfZ=12, sigma0=1, sigma1=1,percentageOfPerturbation=0.3,verbatim=TRUE){
+#' main_noisySBM(NSBMtest$dataMatrix,NIG=TRUE,Qup=10,nbOfZ=1,nbCores=1)
+main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL, a=NULL,b=NULL,c=NULL,d=NULL, n0=1, eta0=1, zeta0=1, alpha=0.1, Qup=NULL, nbCores=parallel::detectCores(), nbOfZ=12, sigma0=1, sigma1=1,percentageOfPerturbation=0.3,verbatim=TRUE){
   p=length(X[1,])
-  if(is.null(Qup)) Qup=p
+  if(is.null(Qup)) Qup=10
   if(length(X[,1])!=p){
     stop("X must be a square matrix")
   }
-
+  
   ind.all=listNodePairs(p, directed=FALSE)
-
+  
   if(NIG){
     if(is.null(a)) a=0
     if(is.null(b)) b=1
@@ -73,7 +74,7 @@ main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL
       result$Q=test$Qmerge
       result$Z=test$Zmerge
       result$theta=test$thetamerge
-
+      
     }
     else {
       result$A = InferGraph(result$Rho, result$theta, result$Z, dataVec,  alpha)
@@ -93,26 +94,27 @@ main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL
 #' @export
 #' @param X A n by p matrix containing a n-sample of a p-vector
 #' @param Meth Choice of test statistics between "Ren", "Jankova_NW", "Jankova_GL", "Liu_SL", "Liu_L", and "zTransform" (warning "zTransform" only work if n>p)
-#' @param NIG A Boolean, if TRUE then the NIG method is used, if FALSE then the non-NIG method is used (by default NIG=FALSE)
-#' @param threshold Threshold use when updating the latent graphs structure from l-values
-#' @param Nbrepet  Number of times the algorithm is repeated
+#' @param NIG A Boolean (automatically chosen according to the selected method : NIG=FALSE except for "Liu_SL" and "Liu_L" test statistics as input). If FALSE, the variance under the alternative hypothesis in assumed to be known. If TRUE, the variances under the alternatives are unknown and estimated with the NIG method. 
+#' @param sigma0 standard deviation under the null hypothesis (by default sigma0=1)
+#' @param sigma1 standard deviation under the alternative hypothesis in the non-NIG method (by default sigma1=1)
+#' @param alpha Level of significance of the multiple testing procedure (by default alpha=0.1)
+#' @param Qup  Maximal number of cluster (by default Qup =10)
+#' @param nbCores Nb of cores to be used during calculations (by default nbCores=parallel::detectCores())
+#' @param nbOfZ  Nb of initialization (by default nbOfZ=12)
+#' @param percentageOfPerturbation perturbation during initialization  (by default percentageOfPerturbation=0.3)
+#' @param threshold Threshold use when updating the latent graphs structure from l-values (by default threshold=0.5)
+#' @param Nbrepet  Number of times the algorithm is repeated (by default Nbrepet=2)
+#' @param n0 Hyperparameter (by default n0=1)
+#' @param eta0 Hyperparameter (by default eta0=1)
+#' @param zeta0 Hyperparameter (by default zeta0=1)
 #' @param rho Hyperparameter of the non-NIG method (by default rho=1)
 #' @param tau Hyperparameter of the non-NIG method (by default tau=1)
 #' @param a Hyperparameter of the NIG method (by default a=0)
 #' @param b Hyperparameter of the NIG method (by default b=1)
 #' @param c Hyperparameter of the NIG method (by default c=1)
 #' @param d Hyperparameter of the NIG method (by default d=1)
-#' @param n0 Hyperparameter (by default n0=1)
-#' @param eta0 Hyperparameter (by default eta0=1)
-#' @param zeta0 Hyperparameter (by default zeta0=1)
-#' @param alpha Level of significance of the multiple testing procedure (by default alpha=0.1)
-#' @param Qup  Maximal number of cluster (by default Qup is equal to the first dimension of X )
-#' @param nbCores Nb of cores to be used during calculations (by default nbCores=1)
-#' @param nbOfZ  Nb of initialization (by default nbOfZ=7)
-#' @param sigma0 standard deviation under the null hypothesis (by default sigma0=1)
-#' @param sigma1 standard deviation under the alternative hypothesis in the non-NIG method (by default sigma1=1)
-#' @param percentageOfPerturbation perturbation during initialization  (by default percentageOfPerturbation=0.3)
-#' @param verbatim print information message  
+#' @param verbatim print information messages  
+
 #'
 #' @return \item{\code{A}}{the adjacency matrix of the inferred graph}
 #'  \item{\code{Z}}{the inferred clustering}
@@ -122,7 +124,7 @@ main_noisySBM <-function(X,NIG=FALSE,threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL
 #' main_noisySBM_GGM(GGMtest$dataMatrix,Meth="Ren",NIG=TRUE,Qup=10,nbOfZ=1)
 #'
 #' @seealso main_noisySBM
-main_noisySBM_GGM <-function(X, Meth="Ren", NIG=NULL, threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL, a=NULL,b=NULL,c=NULL,d=NULL, n0=1, eta0=1, zeta0=1, alpha=0.1, Qup=NULL, nbCores=1, nbOfZ=12, sigma0=1, sigma1=1,percentageOfPerturbation=0.3,verbatim=TRUE){
+main_noisySBM_GGM <-function(X, Meth="Ren", NIG=NULL, threshold=0.5, Nbrepet=2, rho=NULL,tau=NULL, a=NULL,b=NULL,c=NULL,d=NULL, n0=1, eta0=1, zeta0=1, alpha=0.1, Qup=NULL, nbCores=parallel::detectCores(), nbOfZ=12, sigma0=1, sigma1=1,percentageOfPerturbation=0.3,verbatim=TRUE){
   if(Meth=="Ren"){
     outlist_Ren <- SILGGM::SILGGM(X, method = "B_NW_SL")
     dataMatrix=outlist_Ren$z_score_precision
@@ -150,7 +152,7 @@ main_noisySBM_GGM <-function(X, Meth="Ren", NIG=NULL, threshold=0.5, Nbrepet=2, 
     dataMatrix=zTransform(X)
     if(is.null(NIG)) NIG=FALSE}
   else{stop("Unknown method")}
-
+  
   return(main_noisySBM(dataMatrix,NIG=NIG,threshold=threshold, Nbrepet=Nbrepet, rho=rho,tau=tau, a=a,b=b,c=c,d=d, n0=n0, eta0=eta0, zeta0=zeta0, alpha=alpha, Qup=Qup, nbCores=nbCores, nbOfZ=nbOfZ, sigma0=sigma0, sigma1=sigma1,percentageOfPerturbation=percentageOfPerturbation,verbatim=verbatim))
 }
 

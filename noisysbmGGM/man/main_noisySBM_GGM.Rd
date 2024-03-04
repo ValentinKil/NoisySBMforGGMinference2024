@@ -21,7 +21,7 @@ main_noisySBM_GGM(
   zeta0 = 1,
   alpha = 0.1,
   Qup = NULL,
-  nbCores = 1,
+  nbCores = parallel::detectCores(),
   nbOfZ = 12,
   sigma0 = 1,
   sigma1 = 1,
@@ -34,11 +34,11 @@ main_noisySBM_GGM(
 
 \item{Meth}{Choice of test statistics between "Ren", "Jankova_NW", "Jankova_GL", "Liu_SL", "Liu_L", and "zTransform" (warning "zTransform" only work if n>p)}
 
-\item{NIG}{A Boolean, if TRUE then the NIG method is used, if FALSE then the non-NIG method is used (by default NIG=FALSE)}
+\item{NIG}{A Boolean (automatically chosen according to the selected method : NIG=FALSE except for "Liu_SL" and "Liu_L" test statistics as input). If FALSE, the variance under the alternative hypothesis in assumed to be known. If TRUE, the variances under the alternatives are unknown and estimated with the NIG method.}
 
-\item{threshold}{Threshold use when updating the latent graphs structure from l-values}
+\item{threshold}{Threshold use when updating the latent graphs structure from l-values (by default threshold=0.5)}
 
-\item{Nbrepet}{Number of times the algorithm is repeated}
+\item{Nbrepet}{Number of times the algorithm is repeated (by default Nbrepet=2)}
 
 \item{rho}{Hyperparameter of the non-NIG method (by default rho=1)}
 
@@ -60,11 +60,11 @@ main_noisySBM_GGM(
 
 \item{alpha}{Level of significance of the multiple testing procedure (by default alpha=0.1)}
 
-\item{Qup}{Maximal number of cluster (by default Qup is equal to the first dimension of X )}
+\item{Qup}{Maximal number of cluster (by default Qup =10)}
 
-\item{nbCores}{Nb of cores to be used during calculations (by default nbCores=1)}
+\item{nbCores}{Nb of cores to be used during calculations (by default nbCores=parallel::detectCores())}
 
-\item{nbOfZ}{Nb of initialization (by default nbOfZ=7)}
+\item{nbOfZ}{Nb of initialization (by default nbOfZ=12)}
 
 \item{sigma0}{standard deviation under the null hypothesis (by default sigma0=1)}
 
@@ -72,7 +72,7 @@ main_noisySBM_GGM(
 
 \item{percentageOfPerturbation}{perturbation during initialization  (by default percentageOfPerturbation=0.3)}
 
-\item{verbatim}{print information message}
+\item{verbatim}{print information messages}
 }
 \value{
 \item{\code{A}}{the adjacency matrix of the inferred graph}

@@ -30,15 +30,15 @@ updateThetakl_avecRho_NIG <- function(ind.all, theta, dataVec, Z, Z_matrix, RhoV
   n_kl = sum(I_kl)
   sum_E_X = sum(I_kl *  dataVec)
   sum_E_X2= sum(I_kl* dataVec**2)
-
+  
   #---nu_kl
   theta$nu[ind,1] <- if (n_kl == 0) 0 else sum_E_X / n_kl
-
+  
   #---sigma_kl
   theta$nu[ind,2] <- if (n_kl == 0) 1 else sum_E_X2/n_kl - theta$nu[ind,1]**2
   if(theta$nu[ind,2]<=0){theta$nu[ind,2]=.Machine$double.eps}
   theta$nu[ind,2]=sqrt(theta$nu[ind,2])
-
+  
   #---w_kl
   m_kl <- if (k==l) 1/2*sum(Z==k)*(sum(Z==k) - 1)  else sum(Z==k)*sum(Z==l)
   theta$w[ind]<- if (m_kl == 0) 0 else  n_kl / m_kl
@@ -51,7 +51,7 @@ SetTheta_avecRho <- function(ind.all, dataVec, RhoVec, Z, Z_matrix, sigma0, sigm
   p=length(Z)
   Q=nrow(Z_matrix)
   N_Q = Q*(Q+1)/2
-
+  
   theta <- list(nu0=c(0,sigma0))
   theta$pi  = rep(NA,Q)
   for (k in 1:Q) {theta$pi[k]= sum(Z==k)/p}
@@ -59,7 +59,7 @@ SetTheta_avecRho <- function(ind.all, dataVec, RhoVec, Z, Z_matrix, sigma0, sigm
   sd=rep(sigma1, N_Q)
   theta$nu[,2]=sd
   theta$w <- rep(NA, N_Q)
-
+  
   ind=0
   for (k in 1:Q){
     for (l in k:Q){
@@ -84,14 +84,14 @@ SetTheta_avecRho_NIG <- function(ind.all, dataVec, RhoVec, Z, Z_matrix, sigma0){
   p=length(Z)
   Q=nrow(Z_matrix)
   N_Q = Q*(Q+1)/2
-
+  
   theta <- list(nu0=c(0,sigma0))
   theta$pi  = rep(NA,Q)
   for (k in 1:Q) {theta$pi[k]= sum(Z==k)/p}
-
+  
   theta$nu <- matrix(0, nrow=N_Q, ncol=2, byrow=TRUE)
   theta$w <- rep(NA, N_Q)
-
+  
   ind=0
   for (k in 1:Q){
     for (l in k:Q){
@@ -102,15 +102,15 @@ SetTheta_avecRho_NIG <- function(ind.all, dataVec, RhoVec, Z, Z_matrix, sigma0){
       n_kl = sum(I_kl)
       sum_E_X = sum(I_kl *  dataVec)
       sum_E_X2= sum(I_kl* dataVec**2)
-
+      
       #---nu_kl
       theta$nu[ind,1] <- if (n_kl == 0) 0 else sum_E_X / n_kl
-
+      
       #---sigma_kl
       theta$nu[ind,2] <- if (n_kl == 0) 1 else sum_E_X2/n_kl - theta$nu[ind,1]**2
       if(theta$nu[ind,2]<=0){theta$nu[ind,2]=.Machine$double.eps}
       theta$nu[ind,2]=sqrt(theta$nu[ind,2])
-
+      
       #---w_kl
       m_kl <- if (k==l) 1/2*sum(Z==k)*(sum(Z==k) - 1)  else sum(Z==k)*sum(Z==l)
       theta$w[ind]<- if (m_kl == 0) 0 else  n_kl / m_kl
@@ -174,6 +174,7 @@ get_AStar_threshold <- function(iStar, RhoStar, threshold){
   p=length(RhoStar) + 1
   AStar <-  matrix(0, nrow=1, ncol=p)
   AStar[,-iStar]  <- (RhoStar >=threshold)
+  # cat("rho=", round(rho,1), "\n")
   return(AStar=AStar)
 }
 
@@ -192,23 +193,23 @@ swapUpdate <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, t
   Ztest[iStar] = h
   Ztest_matrix <- Zmatrix
   Ztest_matrix[h,iStar] =1; Ztest_matrix[g,iStar] =0
-
+  
   # case group g is empty
   if (sum(Ztest==g) ==0){
     thetatest <- list(nu0=theta$nu0, pi=theta$pi[-g])
     ind = convertGroupPair(g,1:Q,Q,directed=FALSE)  #numero group pair to be deleted
     thetatest$nu=matrix(theta$nu[-ind,],  ncol=2) #otherwise dim pb when only 1 group remains
     thetatest$w=theta$w[-ind]
-
+    
     Q = Q-1
     Ztest_matrix <- matrix(Ztest_matrix[-g,], ncol=p)
     Ztest[Ztest>g] = Ztest[Ztest>g]-1
     if (h > g){ h = h - 1 }
-
-
+    thetatest$pi[h] = mean(Ztest==h)   
+    
     k = h; for (l in 1:Q){thetatest =  updateThetakl_avecRho(ind.all, thetatest, dataVec, Ztest, Ztest_matrix, Rho, k, l)}
     #updates (kl) for k=h i.e. when (kl) implies h
-
+    
     Rhotest <-  Rho
     for (i in 1:p){
       if (Ztest[i]==h){
@@ -220,8 +221,8 @@ swapUpdate <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, t
       }
     }
   }
-
-
+  
+  
   # if g does not empty: Q remains the same
   else{
     thetatest <- list(nu0=theta$nu0, pi=theta$pi)
@@ -230,7 +231,7 @@ swapUpdate <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, t
     thetatest$w=theta$w
     k = g; for (l in 1:Q){thetatest = updateThetakl_avecRho(ind.all, thetatest, dataVec, Ztest, Ztest_matrix, Rho, k, l)}
     k = h; for (l in (1:Q)[-g]){thetatest =updateThetakl_avecRho(ind.all, thetatest, dataVec, Ztest, Ztest_matrix, Rho, k, l)}
-
+    
     p <- length(Z)
     Rhotest <-  Rho
     for (i in 1:p){
@@ -244,7 +245,7 @@ swapUpdate <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, t
     }
   }
   return(list(Ztest=Ztest, Ztest_matrix=Ztest_matrix, Qtest=Q, thetatest=thetatest, Rhotest=Rhotest))  # je n'ai pas changer Q en Qtest
-
+  
 }
 swapUpdate_NIG <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, threshold){    #iStar passe de g à h
   if(g!=Z[iStar]){
@@ -256,21 +257,22 @@ swapUpdate_NIG <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, thet
   Ztest[iStar] = h
   Ztest_matrix <- Zmatrix
   Ztest_matrix[h,iStar] =1; Ztest_matrix[g,iStar] =0
-
+  
   # case group g is empty
   if (sum(Ztest==g) ==0){
     thetatest <- list(nu0=theta$nu0, pi=theta$pi[-g])
     ind = convertGroupPair(g,1:Q,Q,directed=FALSE)  #numero group pair to be deleted
     thetatest$nu=matrix(theta$nu[-ind,],  ncol=2) #otherwise dim pb when only 1 group remains
     thetatest$w=theta$w[-ind]
-
+    
     Q = Q-1
     Ztest_matrix <- matrix(Ztest_matrix[-g,], ncol=p)
     Ztest[Ztest>g] = Ztest[Ztest>g]-1
     if (h > g){ h = h - 1 }
-
+    thetatest$pi[h] = mean(Ztest==h)   
+    
     k = h; for (l in 1:Q){thetatest =  updateThetakl_avecRho_NIG(ind.all, thetatest, dataVec, Ztest, Ztest_matrix, Rho, k, l)}
-
+    
     Rhotest <-  Rho
     for (i in 1:p){
       if (Ztest[i]==h){
@@ -282,8 +284,8 @@ swapUpdate_NIG <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, thet
       }
     }
   }
-
-
+  
+  
   # if g does not empty: Q remains the same
   else{
     thetatest <- list(nu0=theta$nu0, pi=theta$pi)
@@ -292,7 +294,7 @@ swapUpdate_NIG <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, thet
     thetatest$w=theta$w
     k = g; for (l in 1:Q){thetatest = updateThetakl_avecRho_NIG(ind.all, thetatest, dataVec, Ztest, Ztest_matrix, Rho, k, l)}
     k = h; for (l in (1:Q)[-g]){thetatest =updateThetakl_avecRho_NIG(ind.all, thetatest, dataVec, Ztest, Ztest_matrix, Rho, k, l)}
-
+    
     p <- length(Z)
     Rhotest <-  Rho
     for (i in 1:p){
@@ -304,26 +306,26 @@ swapUpdate_NIG <- function(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, thet
         Rhotest[ind.ij] <- RhoNumerator / (RhoNumerator + modelDensity(data_i_j, thetatest$nu0[1], thetatest$nu0[2])*(1-thetatest$w[ind.ql]))
       }
     }
-
+    
   }
-
+  
   return(list(Ztest=Ztest, Ztest_matrix=Ztest_matrix, Qtest=Q, thetatest=thetatest, Rhotest=Rhotest))
-
+  
 }
 
 
 #    ---------   iStar : SearchOpti for nodes iStar ---------------------------------------------------------------------
 SearchOpti_iStar <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho, threshold, rho, tau, n0, eta0, zeta0, fast){
-
+  
   p=length(Z)
   Q= length(theta$pi)
   g = Z[iStar]
   listDelta <- rep(NA, Q)
   listDelta[g] = 0
   seqQ=1:Q
-
+  
   A=get_Aall_threshold(Rho, threshold)
-
+  
   # ----------- Calculate delta
   for (h in seqQ[-g]){
     Rho_test = get_Rho_Star(iStar, h, theta, Z[-iStar], dataVec)
@@ -332,11 +334,14 @@ SearchOpti_iStar <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho, th
     sigma1 =theta$nu[1,2]           # all theta$nu[,2] are equals
     listDelta[h] =delta_NSBM(ind.all, dataVec, A, A_test, Z, Zmatrix, iStar, g, h,  rho, tau, n0, eta0, zeta0, sigma0, sigma1, fast)$delta
   }
-
+  
   # -------- Change cluster of iStar if necessary
   h = which.max(listDelta)  # cluster which has the biggest ICL
-
+  #  cat("g",g,"\n")
+  #  cat("h",h,"\n")
+  
   if (h!=g){
+    # cat("iStar", iStar, "change de groupe", "\n")
     swapping = swapUpdate(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, threshold)
     Z=swapping$Ztest
     Zmatrix=swapping$Ztest_matrix
@@ -348,16 +353,16 @@ SearchOpti_iStar <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho, th
 }
 
 SearchOpti_iStar_NIG <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho, threshold, a,b,c,d, n0, eta0, zeta0, fast){
-
+  
   p=length(Z)
   Q= length(theta$pi)
   g = Z[iStar]
   listDelta <- rep(NA, Q)
   listDelta[g] = 0
   seqQ=1:Q
-
+  
   A=get_Aall_threshold(Rho, threshold)
-
+  
   # ----------- Calculate delta
   for (h in seqQ[-g]){
     Rho_test = get_Rho_Star(iStar, h, theta, Z[-iStar], dataVec)
@@ -365,12 +370,14 @@ SearchOpti_iStar_NIG <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho
     sigma0 = theta$nu0[2]
     listDelta[h] =delta_NSBM_NIG(ind.all, dataVec, A, A_test, Z, Zmatrix, iStar, g, h, a, b, c, d, n0, eta0, zeta0, sigma0, fast)$delta
   }
-
+  
   # -------- Change cluster of iStar if necessary
   h = which.max(listDelta)  # cluster which has the biggest ICL
-
-
+  #  cat("g",g,"\n")
+  #  cat("h",h,"\n")
+  
   if (h!=g){
+    # cat("iStar", iStar, "change de groupe", "\n")
     swapping = swapUpdate_NIG(iStar, g, h, ind.all, dataVec, Z, Zmatrix,  Rho, theta, threshold)
     Z=swapping$Ztest
     Zmatrix=swapping$Ztest_matrix
@@ -386,15 +393,15 @@ SearchOpti_iStar_NIG <- function(iStar, ind.all, dataVec, Z, Zmatrix, theta, Rho
 
 #    ---------   SearchOpti "for all nodes and an initialization" -----------------------------------------------------------
 SearchOpti <- function(init, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast,verbatim=TRUE){
-
+  
   #------- init
   Z=init$Z
   Zmatrix=init$Zmatrix
   Rho=init$Rho
   theta=init$theta
   Q=length(theta$pi)
-
-
+  
+  
   # -------------------------algo for all nodes
   p=length(Z)
   for (repet in 1:Nbrepet){
@@ -404,19 +411,20 @@ SearchOpti <- function(init, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0,
     while ((length(Nodes) >1)  & (Q > 1)){
       iStar=sample(Nodes, 1)
       iStarSauv=c(iStarSauv, iStar)
-
+      
       res = SearchOpti_iStar(iStar, ind.all, dataVec, Z,  Zmatrix, theta, Rho, threshold, rho, tau, n0, eta0, zeta0, fast)
       Rho=res$Rho
       Z=res$Z
-
+      
       Zmatrix=res$Zmatrix
       Q=res$Q
       theta=res$theta
       Nodes=setdiff(Nodes, iStar)
     }
-
+    
     if ((length(Nodes) ==1)  & (Q > 1)){
       iStar=Nodes
+      #cat("iStar=", iStar, "\n---")
       res = SearchOpti_iStar(iStar, ind.all, dataVec, Z,  Zmatrix, theta, Rho, threshold, rho, tau, n0, eta0, zeta0, fast)
       Rho=res$Rho
       Z=res$Z
@@ -424,37 +432,37 @@ SearchOpti <- function(init, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0,
       Q=res$Q
       theta=res$theta
       Nodes=setdiff(Nodes, iStar)
-
+      
     }
   }
-
-
-
+  
+  
+  
   # --------------- keep this initialisation?
-
+  
   A= get_Aall_threshold(Rho, threshold)
   sigma0=theta$nu0[2]
   sigma1=theta$nu[1,2]    #all theta$nu[,2] are equals
   calculICL  = evalICL(ind.all, dataVec, Z, Zmatrix, Q, A, rho, tau,  n0, eta0, zeta0, sigma0, sigma1)
   ICL=calculICL$ICL_exact_NSBM
   currentSolution =list(Rho=Rho, A=A, Z=Z, Zmatrix=Zmatrix, Q=Q, theta=theta, ICL=ICL)
-
-
+  
+  
   return(currentSolution)
 }
 
 
 
 SearchOpti_NIG <- function(init, dataVec, ind.all, threshold, Nbrepet, a, b, c , d, n0, eta0, zeta0, fast,verbatim=TRUE){
-
+  
   #------- init
   Z=init$Z
   Zmatrix=init$Zmatrix
   Rho=init$Rho
   theta=init$theta
   Q=length(theta$pi)
-
-
+  
+  
   # -------------------------algo for all nodes
   p=length(Z)
   for (repet in 1:Nbrepet){
@@ -465,19 +473,20 @@ SearchOpti_NIG <- function(init, dataVec, ind.all, threshold, Nbrepet, a, b, c ,
       #  for (iStar in 1:n){
       iStar=sample(Nodes, 1)
       iStarSauv=c(iStarSauv, iStar)
-
+      
       res = SearchOpti_iStar_NIG(iStar, ind.all, dataVec, Z,  Zmatrix, theta, Rho, threshold, a, b, c, d, n0, eta0, zeta0, fast)
       Rho=res$Rho
       Z=res$Z
-
+      
       Zmatrix=res$Zmatrix
       Q=res$Q
       theta=res$theta
       Nodes=setdiff(Nodes, iStar)
     }
-
+    
     if ((length(Nodes) ==1)  & (Q > 1)){
       iStar=Nodes
+      #cat("iStar=", iStar, "\n---")
       res = SearchOpti_iStar_NIG(iStar, ind.all, dataVec, Z,  Zmatrix, theta, Rho, threshold,  a,b,c,d, n0, eta0, zeta0, fast)
       Rho=res$Rho
       Z=res$Z
@@ -485,17 +494,17 @@ SearchOpti_NIG <- function(init, dataVec, ind.all, threshold, Nbrepet, a, b, c ,
       Q=res$Q
       theta=res$theta
       Nodes=setdiff(Nodes, iStar)
-
+      
     }
   }
-
+  
   # --------------- keep this initialisation?
   A= get_Aall_threshold(Rho, threshold)
   sigma0=theta$nu0[2]
   calculICL  = evalICL_NIG(ind.all, dataVec, Z, Zmatrix, Q, A, a,b,c,d,  n0, eta0, zeta0, sigma0)
   ICL=calculICL$ICL_exact_NSBM
   currentSolution =list(Rho=Rho, A=A, Z=Z, Zmatrix=Zmatrix, Q=Q, theta=theta, ICL=ICL)
-
+  
   return(currentSolution)
 }
 
@@ -524,63 +533,63 @@ SearchOpti_parallel_NIG <- function(s, ListOfInit, dataMatrix, ind.all, threshol
 mainSearchOpti <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, percentageOfPerturbation, rho, tau, n0, eta0, zeta0, sigma0, sigma1, fast,verbatim=TRUE){
   p=nrow(dataMatrix)
   ind.all=listNodePairs(p, directed=FALSE)
-
+  
   Q=Qup
   ListOfInit <- initialPoints(Q, ind.all, dataMatrix, nbOfZ, percentageOfPerturbation, threshold, sigma0, sigma1)
   M=length(ListOfInit$init$Z)
   BestICL= -Inf
-
+  
   if (Sys.info()["sysname"]=="Windows"){nbCores <- 1}
   else { nbCores <- if (nbCores>1) min(c(round(nbCores), parallel::detectCores())) else 1}
   doParallelComputing <- (nbCores>1)
-
+  
   if(doParallelComputing){
     ListOfSolutions <- parallel::mclapply(1:M, function(k){
-      SearchOpti_parallel(k, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast,verbatim)},  mc.cores=nbCores)
-
+      SearchOpti_parallel(k, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast,verbatim)},  mc.cores=nbCores)    
     ListOfICL <- lapply(ListOfSolutions, function(solutionThisRun) solutionThisRun$ICL)
     BestSolution <- ListOfSolutions[[which.max(ListOfICL)]]
     if(verbatim){cat("s=",which.max(ListOfICL), "\n")}
-  }else{
+    }else{
     for (s in 1:M){
       if(verbatim){cat("s",s, "--------------------\n")}
+      
       currentInitialPoint <-  list(Z=ListOfInit$init$Z[[s]], Zmatrix=ListOfInit$init$Zmatrix[[s]], Rho=ListOfInit$init$Rho[[s]], theta=ListOfInit$init$theta[[s]])
       dataVec=ListOfInit$dataVec
       currentSolution <- SearchOpti(currentInitialPoint, dataVec, ind.all, threshold, Nbrepet, rho, tau, n0, eta0, zeta0, fast,verbatim)
       currentSolution$sBest <- s
       if (currentSolution$ICL > BestICL){
         if(verbatim){cat("s better than before \n" )
-        cat("sBest=", s, "\n")}
+          cat("sBest=", s, "\n")}
         BestSolution <-  currentSolution
         BestICL=currentSolution$ICL
       }
     }
   }
   return(BestSolution=BestSolution)
-
+  
 }
 
-mainSearchOpti_NIG <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, percentageOfPerturbation,  a,b,c,d, n0, eta0, zeta0, sigma0, fast,verbatim=TRUE){
-  p=nrow(dataMatrix)
-  ind.all=listNodePairs(p, directed=FALSE)
 
+mainSearchOpti_NIG <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbOfZ, percentageOfPerturbation,  a,b,c,d, n0, eta0, zeta0, sigma0, fast,verbatim=TRUE){  p=nrow(dataMatrix)
+  ind.all=listNodePairs(p, directed=FALSE)
+  
   Q=Qup
   ListOfInit <- initialPoints_NIG(Q,  ind.all, dataMatrix, nbOfZ, percentageOfPerturbation, threshold, sigma0)
   M=length(ListOfInit$init$Z)
   BestICL= -Inf
-
+  
   if (Sys.info()["sysname"]=="Windows"){nbCores <- 1}
   else { nbCores <- if (nbCores>1) min(c(round(nbCores), parallel::detectCores())) else 1}
   doParallelComputing <- (nbCores>1)
-
+  
   if(doParallelComputing){
     ListOfSolutions <- parallel::mclapply(1:M, function(k){
       SearchOpti_parallel_NIG(k, ListOfInit, dataMatrix, ind.all, threshold, Nbrepet, a,b,c,d, n0, eta0, zeta0, fast,verbatim)},   mc.cores=nbCores)
-
+    
     ListOfICL <- lapply(ListOfSolutions, function(solutionThisRun) solutionThisRun$ICL)
     BestSolution <- ListOfSolutions[[which.max(ListOfICL)]]
     if(verbatim){cat("s=",which.max(ListOfICL), "\n")}
-  }else{
+    }else{
     for (s in 1:M){
       if(verbatim){cat("s",s, "--------------------\n")}
       currentInitialPoint <-  list(Z=ListOfInit$init$Z[[s]], Zmatrix=ListOfInit$init$Zmatrix[[s]], Rho=ListOfInit$init$Rho[[s]], theta=ListOfInit$init$theta[[s]])
@@ -589,7 +598,7 @@ mainSearchOpti_NIG <- function(dataMatrix, Qup, threshold, Nbrepet, nbCores, nbO
       currentSolution$sBest <- s
       if (currentSolution$ICL > BestICL){
         if(verbatim){cat("s better than before \n" )
-        cat("sBest=", s, "\n")}
+          cat("sBest=", s, "\n")}
         BestSolution <-  currentSolution
         BestICL=currentSolution$ICL
       }

@@ -11,7 +11,7 @@ sourceCpp("./src/convertNodePair.cpp")
 
 
 #-----------------Termes kl-----------------------------------
-#Compute the usefull therms define in Proposition 4.3 of NSBM_ICL
+#Compute the usefull terms 
 terme_kl <- function(ind.all, dataVec, Avec, A_test, Z, Z_matrix, iStar, g, h, k, l, rho, n0, eta0, zeta0, fast){
   lenZ=length(Z)
   if(fast){
@@ -508,7 +508,6 @@ delta_NSBM_NIG <- function(ind.all, dataVec, A, A_test, Z, Z_matrix, iStar, g, h
       terme_nsbm_db_g =  terme_nsbm_db_g + delta$terme_NSBM
       terme2_g_SBM = terme2_g_SBM + delta$terme2_SBM
     }
-    terme_nsbm_db_g=terme_nsbm_db_g+ Q*terme_log(b,c,d)
   }
 
 

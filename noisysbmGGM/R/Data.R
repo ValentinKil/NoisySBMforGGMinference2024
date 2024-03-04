@@ -12,7 +12,7 @@
 #'   }
 #'
 #' @examples
-#' main_noisySBM(NSBMtest$dataMatrix,NIG=TRUE,Qup=10,nbOfZ=1)
+#' main_noisySBM(NSBMtest$dataMatrix,NIG=TRUE,Qup=10,nbOfZ=1,nbCores=1)
 #'
 #' #Note : These data were created using the following instructions
 #' p=50
@@ -41,7 +41,7 @@
 #'   }
 #'
 #' @examples
-#' main_noisySBM_GGM(GGMtest$dataMatrix,Meth="Ren",NIG=TRUE,Qup=10,nbOfZ=1)
+#' main_noisySBM_GGM(GGMtest$dataMatrix,Meth="Ren",NIG=TRUE,Qup=10,nbOfZ=1,nbCores=1)
 #'
 #' #Note : These data were created using the following instructions
 #' n=30

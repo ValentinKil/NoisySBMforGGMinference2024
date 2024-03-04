@@ -1,7 +1,7 @@
 
 #----------------------------Random NSBM--------------------------------------------------------
 
-#' return a random NSBM, correspond to the Algo1 in ESJ paper
+#' return a random NSBM
 #' @name rnsbm
 #' @export
 #' @param p (interger) number of node in the network
@@ -24,11 +24,11 @@ rnsbm <-  function(p, theta, modelFamily='Gauss'){
     nu=vecToMatrix(theta$nu,P)
   }
   Q <- length(theta$pi)
-
+  
   #' latent variables
   #' we strat by sampling the latent variable Z which is the vector containing the family of each nodes
   Z <- sample(1:Q, p, replace=TRUE, prob=theta$pi)
-
+  
   #' adjacency matrix
   #' then we sample the adjacency matrix, conditionally to Z the coordinate of A follow a binomial
   #' of a parameter contain in theta$w
@@ -36,7 +36,7 @@ rnsbm <-  function(p, theta, modelFamily='Gauss'){
   for (i in 1:(p-1)){
     A[i,(i+1):p] <- stats::rbinom(p-i, 1,w[Z[i],Z[(i+1):p]])
   }
-
+  
   #' noisy observations under the null
   #' we create a matrix (n,n) X and we initialize all its entry (half of them is undirected)
   #' with a sampling of the law under the null
@@ -51,10 +51,10 @@ rnsbm <-  function(p, theta, modelFamily='Gauss'){
   if (modelFamily=='Poisson'){
     X[nonZero] <- stats::rpois(N, theta$nu0)
   }
-
+  
   #' then for each entry where A is none zero we sample it according to the law under the alternative
   m <-  p-1
-
+  
   for (i in 1:m){
     nonzeroind <- which(A[i,]!=0)
     L <- length(nonzeroind)
@@ -70,7 +70,7 @@ rnsbm <-  function(p, theta, modelFamily='Gauss'){
       }
     }
   }
-
+  
   A <- A + t(A)
   X <- X + t(X)
   return(list(dataMatrix=X, theta=theta, latentZ=Z, latentAdj=A))
@@ -115,9 +115,9 @@ listNodePairs2 <- function(p){
   index[,1] <- rep(1:p,times=p:1)
   toto <- c()
   for (k in 1:(p-1)){
-      toto <- c(toto, k*p + 1:k)
-    }
-    index[,2] <- rep(1:p,p)[-toto]
+    toto <- c(toto, k*p + 1:k)
+  }
+  index[,2] <- rep(1:p,p)[-toto]
   return(index)
 }
 
@@ -267,7 +267,7 @@ qvaluesNSBM <- function(dataVec, Z, theta, lvalues){
   Q <- length(theta$pi)
   num <- den <- result <- rep(0, length(dataVec))
   ind <- 0
-
+  
   for (q in 1:Q){
     for (l in q:Q){
       ind <- ind + 1
@@ -280,7 +280,7 @@ qvaluesNSBM <- function(dataVec, Z, theta, lvalues){
   den <- den + num
   ind <- (den!=0)
   result[ind] <- num[ind]/den[ind]
-
+  
   return(result)
 }
 
@@ -289,7 +289,7 @@ qvaluesNSBM <- function(dataVec, Z, theta, lvalues){
 # --------------Data Simulation  ---------------
 simuData<-function(n,p,graph, g=NULL, prob=NULL, theta=NULL, u=NULL, v=NULL){
   Z=NULL
-
+  
   #Band
   if (graph=="band3"){
     if(is.null(g)) g=3 
@@ -304,32 +304,9 @@ simuData<-function(n,p,graph, g=NULL, prob=NULL, theta=NULL, u=NULL, v=NULL){
     A.true=as.matrix(L$theta)
     X=L$data
   }
-  if (graph=="hubdefaut"){
-    L = huge::huge.generator(n=n, d=p, graph = "hub", u=u, v=v)
-    A.true=as.matrix(L$theta)
-    X=L$data
-  }
-  # E-R
-  if (graph=="ER"){
-    if(is.null(prob)) prob=  min(0.025, 5/(2*p))
-    L = huge::huge.generator(n=n, d=p, graph = "random", prob=prob, u=u, v=v)
-    A.true=as.matrix(L$theta)
-    X=L$data
-  }
-  if (graph=="ERdefaut"){
-     L = huge::huge.generator(n=n, d=p, graph = "random", u=u, v=v)
-    A.true=as.matrix(L$theta)
-    X=L$data
-  }
   # scale-free
   if (graph=="scale-free"){
     L = huge::huge.generator(n=n, d=p, graph = "scale-free", u=u, v=v)
-    A.true=as.matrix(L$theta)
-    X=L$data
-  }
-  #cluster avec p/20 groupes par defaut et prob=0.3
-  if (graph=="cluster"){
-    L = huge::huge.generator(n=n, d=p, graph = "cluster", u=u, v=v)
     A.true=as.matrix(L$theta)
     X=L$data
   }
@@ -351,28 +328,7 @@ simuData<-function(n,p,graph, g=NULL, prob=NULL, theta=NULL, u=NULL, v=NULL){
     Sigma = stats::cov2cor(solve(Omega))
     X = MASS::mvrnorm(n, rep(0, p), Sigma)
   }
-  
-  #SBM2 3  communities (parametre de Simone)
-  if(graph=="SBM3communautes"){
-    if(is.null(u)) u=0.1
-    if(is.null(v)) v = 0.3
-  #  if(is.null(theta)) theta=list(pi=c(1/3,1/3,1/3),w=cbind(c(0.125,0.0025,0.0025),c(0.0025,0.125,0.0025),c(0.0025,0.0025,0.125)))
-    if(is.null(theta)) theta=list(pi=c(1/3,1/3,1/3),w=cbind(c(0.1,0.001,0.001),c(0.001,0.1,0.001),c(0.001,0.001,0.1)))
-    
-    
-    Q<-length(theta$pi)
-    Z <- sample(1:Q, p, replace=TRUE, prob=theta$pi)
-    A <- matrix(0, p, p)
-    for (i in 1:(p-1)){
-      A[i,(i+1):p] <- stats::rbinom(p-i, 1, theta$w[Z[i],Z[(i+1):p]])
-    }
-    A.true <- A + t(A)
-    Omega <- A.true*v
-    diag(Omega) = abs(min(eigen(Omega)$values)) + 0.1 + u
-    Sigma = stats::cov2cor(solve(Omega))
-    X = MASS::mvrnorm(n, rep(0, p), Sigma)
-  }
-     return(list(X=X,A.true=A.true,Z=Z))
+  return(list(X=X,A.true=A.true,Z=Z))
 }
 
 
@@ -393,8 +349,8 @@ simuData_maxDeg<-function(n, p, maxdegree, power=2){
   diag(Omega) = abs(min(eigen(Omega)$values)) + 0.1 + u
   Sigma = stats::cov2cor(solve(Omega))
   X = MASS::mvrnorm(n, rep(0, p), Sigma)
-
-
+  
+  
   return(list(X=X,A.true=as.matrix(A.true)))
 }
 

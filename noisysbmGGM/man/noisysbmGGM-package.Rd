@@ -6,7 +6,7 @@
 \alias{noisysbmGGM-package}
 \title{noisysbmGGM: Noisy Stochastic Block Mode: Graph and GGM Inference by Multiple Testing and Greedy Bayesian Algorithm}
 \description{
-Greedy Bayesian algorithm to fit the noisy stochastic block model to an observed sparse graph. Moreover, a graph inference procedure to recover Gaussian Graphical Model from real data. This procedure comes with a control of the false discovery rate. The method is described in the article "Enhancing the Power of Gaussian Graphical Model Inference by Modeling the Graph Structure" by Kilian, Rebafka, and Villers (2024) <https:hal.science/hal-04460593>.
+Greedy Bayesian algorithm to fit the noisy stochastic block model to an observed sparse graph. Moreover, a graph inference procedure to recover Gaussian Graphical Model from real data. This procedure comes with a control of the false discovery rate. The method is described in the article "Enhancing the Power of Gaussian Graphical Model Inference by Modeling the Graph Structure" by Kilian, Rebafka, and Villers (2024) \href{https://arxiv.org/abs/2402.19021}{arXiv:2402.19021}.
 }
 \author{
 \strong{Maintainer}: Valentin Kilian \email{valentin.kilian@ens-rennes.fr}
