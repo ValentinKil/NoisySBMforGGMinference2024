@@ -1,10 +1,11 @@
 Package: noisysbmGGM
 Title: Noisy Stochastic Block Model for GGM Inference
-Version: 0.1.2.3
+Version: 0.1.2.4
 Authors@R: c(person(given = "Valentin",
            family = "Kilian",
            role = c("aut", "cre"),
-           email = "valentin.kilian@ens-rennes.fr"),
+           email = "valentin.kilian@ens-rennes.fr"
+            comment = c(ORCID = "0009-0001-9516-431X"))),
     person(given = "Fanny",
            family = "Villers",
            role = "aut",
@@ -15,6 +16,7 @@ Description: Greedy Bayesian algorithm to fit the noisy stochastic block model t
 License: GPL-2
 Encoding: UTF-8
 Imports: parallel,ppcor,SILGGM,stats,igraph,huge,Rcpp,RcppArmadillo,MASS,RColorBrewer
+URL: https://github.com/ValentinKil/NoisySBMforGGMinference2024
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Depends: 
