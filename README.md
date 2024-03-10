@@ -3,4 +3,4 @@ Supplementary materials for the article. "Enhancing the Power of Gaussian Graphi
 
 Link to the article : https://arxiv.org/abs/2402.19021
 
-Link to the package : https://cran.r-project.org/web/packages/noisysbmGGM/index.html you can look at our [vignette](https://cran.r-project.org/web/packages/noisysbmGGM/vignettes/UserGuide.html)
+Link to the package :  https://CRAN.R-project.org/package=noisysbmGGM  you can look at our [vignette](https://cran.r-project.org/web/packages/noisysbmGGM/vignettes/UserGuide.html)
